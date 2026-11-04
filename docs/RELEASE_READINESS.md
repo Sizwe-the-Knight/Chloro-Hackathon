@@ -20,7 +20,11 @@ Sources: [Render free-service documentation](https://render.com/docs/free), [Ren
 
 The [hackathon rules](https://paypalaihackathon.devpost.com/rules) allow a runnable local build with complete instructions. [JUDGE_ACCESS.md](JUDGE_ACCESS.md) documents that option and its credential requirements. Thus optional hosting limitations do not require expanding the MVP.
 
-## Remaining publication/submission actions
+## Verified local release evidence
+
+Tested source commit: `fc003eda60d1feecc794619e40c92d32b68fd19c`. Its 37-file export had no credentials/private evidence. A frozen offline install reused all 98 packages with zero downloads and scripts disabled. Four focused payment checks plus two release-affected private-record checks passed; typecheck and build passed once. The built server started from that empty source copy, with disabled providers, zero inquiries/AI usage and a 404 for `/.env`. No live provider requests repeated. Candidate/index/history scans found no configured or recognized credential patterns; this is scoped heuristic evidence. See TRACKER.md for preservation hashes and final Git status.
+
+## Owner publication/submission actions
 
 Separate owner authorization is required to create/push a public repository under Sizwe-the-Knight. Then the submission needs its real source URL, the working public YouTube video under three minutes, Devpost project description/AI and PayPal usage/sandbox limitations, screenshots, and the chosen judge-access/support details. No public URL is invented here. Do not mark submission complete before it actually happens.
 
