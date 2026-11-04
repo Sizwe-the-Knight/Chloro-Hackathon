@@ -2,6 +2,7 @@ import {PaymentError, PaymentService, fingerprint, type Quote, type Gateway, typ
 import type {Inquiry} from '../shared/inquiry.js';
 import type {PaymentView} from '../shared/commerce.js';
 import {PAYMENT_CURRENCIES} from '../shared/commerce.js';
+import {merchantForInquiry} from '../shared/merchants.js';
 
 type Purchase = {payment?:RecordState; merchantReady?:boolean; travelerHandover?:boolean; merchantHandover?:boolean};
 export type CommerceState = {purchases:Record<string,Purchase>};
@@ -17,6 +18,7 @@ export class CommerceService {
   }
   private quote(id:string):Quote {
     const i=this.source(id);const o=i.offer;
+    if(!merchantForInquiry(i))throw new PaymentError('Demonstration merchant association is invalid. Payment blocked.');
     if(i.status!=='BUYER_ACCEPTED'||!o?.merchantApproved||i.acceptedVersion!==o.version)
       throw new PaymentError('Merchant approval and traveler acceptance of this exact offer are required.');
     if(!PAYMENT_CURRENCIES.includes(o.currency))throw new PaymentError('This offer currency cannot use PayPal checkout. Request a supported merchant offer; no automatic conversion is allowed.');

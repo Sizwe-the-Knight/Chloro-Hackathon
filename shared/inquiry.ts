@@ -1,4 +1,6 @@
+import type {MerchantId} from './merchants.js';
 export type InquiryInput = {
+  merchantId?: MerchantId;
   message: string; travelerLanguage: string; budget: string; currency: string; departure: string;
 };
 export type Interpretation = {
@@ -11,6 +13,7 @@ export type MerchantOffer = {
   readyAt: string; collectionTerms: string; clarification: string;
 };
 export type Inquiry = {
+  merchantId?: MerchantId;
   id: string; createdAt: string; input: InquiryInput; merchant: string; merchantLanguage: string;
   status: 'INTERPRETING' | 'AI_ERROR' | 'NEEDS_CLARIFICATION' | 'AWAITING_MERCHANT' |
     'MERCHANT_REVIEW' | 'DECLINED' | 'OFFER_APPROVED' | 'BUYER_ACCEPTED';

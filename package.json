@@ -9,6 +9,7 @@
     "test:m2": "tsx --test server/inquiry.test.ts",
     "test:m3": "tsx --test server/commerce.test.ts",
     "test:m4": "tsx --test server/resilience.test.ts",
+    "test:m51": "tsx --test server/demonstration.test.ts",
     "release:check": "node scripts/release-check.mjs",
     "typecheck": "tsc --noEmit",
     "build": "vite build && tsc -p tsconfig.server.json",

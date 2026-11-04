@@ -1,6 +1,6 @@
-# Release candidate — local only
+# Release readiness
 
-M5 prepares source for review, not a public launch. Local Git uses `main` and repository-only identity `Sizwe-the-Knight` / `339973498+Sizwe-the-Knight@users.noreply.github.com`, derived from the public account ID and GitHub's noreply format. Global identity/account settings are unchanged. No remote is added, no repository created online, and nothing pushed.
+M5 prepared the local source candidate. The owner has now created and explicitly authorized M6 source publication to [Sizwe-the-Knight/Chloro-Hackathon](https://github.com/Sizwe-the-Knight/Chloro-Hackathon); verified push evidence belongs in TRACKER.md. Hosting, video and Devpost actions are separate. Local Git uses `main` and repository-only identity `Sizwe-the-Knight` / `339973498+Sizwe-the-Knight@users.noreply.github.com`, derived from the public account ID and GitHub's noreply format. Global identity/account settings remain unchanged.
 
 ## Publication boundary
 
@@ -26,6 +26,6 @@ Tested source commit: `fc003eda60d1feecc794619e40c92d32b68fd19c`. Its 37-file ex
 
 ## Owner publication/submission actions
 
-Separate owner authorization is required to create/push a public repository under Sizwe-the-Knight. Then the submission needs its real source URL, the working public YouTube video under three minutes, Devpost project description/AI and PayPal usage/sandbox limitations, screenshots, and the chosen judge-access/support details. No public URL is invented here. Do not mark submission complete before it actually happens.
+The real source URL is the owner-created repository above. Remaining submission work needs a working public YouTube video under three minutes, Devpost project description/AI and PayPal usage/sandbox limitations, screenshots, and confirmed judge-access/support details. These actions are outside this GitHub-only authorization. Do not mark M6 or submission complete before all original requirements are satisfied.
 
-This release candidate is intended for code freeze: no further feature/redesign work; only owner-authorized blocking release/safety fixes. The locked deadline is November 12, 2026, 22:00 SAST; internal target November 11, 18:00 SAST; Foundation code-freeze cutoff remains November 10, 18:00 SAST. Evidence and commit IDs are in TRACKER.md and local Git history.
+The M5 source snapshot remains historical evidence. Owner-authorized M5.1 adds the second fictional food passport allowed by Foundation 04; its verification is recorded separately in TRACKER.md. The original M5 archive is not evidence of the M5.1 source. M6 source publication includes the completed M5.1 changes after exact-index/history review and scanning; no deployment is authorized. The locked deadline is November 12, 2026, 22:00 SAST; internal target November 11, 18:00 SAST; Foundation code-freeze cutoff remains November 10, 18:00 SAST. No unrelated feature/redesign work is authorized.

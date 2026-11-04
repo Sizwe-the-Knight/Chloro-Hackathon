@@ -2,9 +2,10 @@ import { randomUUID } from 'node:crypto';
 import { PaymentError } from './payment.js';
 import type { Inquiry, InquiryInput, Interpretation, MerchantOffer } from '../shared/inquiry.js';
 import {PAYMENT_CURRENCIES} from '../shared/commerce.js';
+import {demoMerchants,merchantById} from '../shared/merchants.js';
 
 export const MODEL = 'gemini-3.5-flash-lite';
-export const MERCHANT = 'Chloro Craft Studio (seeded demonstration merchant)';
+export const MERCHANT = demoMerchants[0].storedName;
 export const currencies = ['USD', 'ZAR', 'EUR', 'GBP'];
 export type InquiryState = {inquiries: Inquiry[]; usage: {day: string; count: number; lastAt: number; paused?: string}};
 export interface InquiryStore { get(): InquiryState; save(state: InquiryState): void }
@@ -41,10 +42,12 @@ function date(value: unknown): string {
 }
 export function validateInput(value: unknown, now = Date.now()): InquiryInput {
   const v = object(value);
+  const merchant=merchantById(v.merchantId===undefined?'craft':v.merchantId);
+  if(!merchant)throw invalid('Choose a participating demonstration merchant.');
   const input = {message: text(v.message, 'your inquiry', 2000), travelerLanguage: text(v.travelerLanguage, 'traveler language', 50),
     budget: money(v.budget), currency: currency(v.currency), departure: date(v.departure)};
   if (Date.parse(input.departure) <= now) throw invalid('Departure deadline must be in the future.');
-  return input;
+  return {...input,merchantId:merchant.id};
 }
 const nullableText = (value: unknown, name: string) => value === null ? null : text(value, name);
 function list(value: unknown, name: string): string[] {
@@ -89,7 +92,8 @@ export class InquiryService {
     if (s.usage.paused) throw new PaymentError(s.usage.paused,503);
     if (s.usage.count >= 20) throw new PaymentError('Daily limit reached: 20 AI requests. No request was sent.',429);
     if (s.usage.lastAt && this.now()-s.usage.lastAt < 5000) throw new PaymentError('Wait five seconds between AI requests.',429);
-    const inquiry: Inquiry = {id:randomUUID(),createdAt:new Date(this.now()).toISOString(),input,merchant:MERCHANT,merchantLanguage:'English',status:'INTERPRETING'};
+    const merchant=merchantById(input.merchantId)!;
+    const inquiry: Inquiry = {id:randomUUID(),createdAt:new Date(this.now()).toISOString(),input,merchantId:merchant.id,merchant:merchant.storedName,merchantLanguage:'English',status:'INTERPRETING'};
     s.inquiries.push(inquiry); s.usage.count++; s.usage.lastAt=this.now();
     // Persist attempted calls before the network request; failures count toward the hard cap.
     this.store.save(s); this.busy=true;
