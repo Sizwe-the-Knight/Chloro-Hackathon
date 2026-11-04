@@ -1,0 +1,32 @@
+# Local credentials and machine-specific files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Dependencies, caches and builds
+node_modules/
+dist/
+build/
+coverage/
+.vite/
+.pnpm-store/
+*.log
+
+# Environment
+.DS_Store
+Thumbs.db
+.vscode/*.log
+
+# Local data and session files
+*.sqlite
+*.sqlite3
+local-data/
+
+# Original starter archive and machine-local editor state are not release source.
+Chloro_Foundation_Starter.zip
+.vscode/
+.idea/

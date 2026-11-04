@@ -1,0 +1,19 @@
+{
+  "name": "chloro", "private": true, "version": "0.1.0", "type": "module",
+  "license": "MIT",
+  "engines": {"node": ">=24 <25", "pnpm": ">=11 <12"},
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env --import tsx server/index.ts",
+    "test": "tsx --test server/payment.test.ts",
+    "test:m2": "tsx --test server/inquiry.test.ts",
+    "test:m3": "tsx --test server/commerce.test.ts",
+    "test:m4": "tsx --test server/resilience.test.ts",
+    "release:check": "node scripts/release-check.mjs",
+    "typecheck": "tsc --noEmit",
+    "build": "vite build && tsc -p tsconfig.server.json",
+    "start": "node --env-file-if-exists=.env build/server/index.js"
+  },
+  "dependencies": {"express": "^5.1.0", "react": "^19.2.0", "react-dom": "^19.2.0"},
+  "devDependencies": {"@types/express": "^5.0.0", "@types/node": "^24.0.0", "@types/react": "^19.2.0", "@types/react-dom": "^19.2.0", "tsx": "^4.20.0", "typescript": "^5.9.0", "vite": "^7.2.0"}
+}

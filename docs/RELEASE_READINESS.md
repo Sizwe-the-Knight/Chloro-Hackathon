@@ -1,0 +1,27 @@
+# Release candidate — local only
+
+M5 prepares source for review, not a public launch. Local Git uses `main` and repository-only identity `Sizwe-the-Knight` / `339973498+Sizwe-the-Knight@users.noreply.github.com`, derived from the public account ID and GitHub's noreply format. Global identity/account settings are unchanged. No remote is added, no repository created online, and nothing pushed.
+
+## Publication boundary
+
+- Include application source, lockfile, README, LICENSE, dependency notices, `.env.example`, release checker and governing/evidence documents.
+- Exclude `.env*` except `.env.example`, `local-data/`, screenshots/receipts/counters, dependencies, builds, editor state, credentials and the original starter ZIP. The archive is preserved locally, not silently deleted or republished.
+- Run `pnpm release:check` before initial commit and again before any later publication. It inspects candidate/tracked files and reachable/reflog history, comparing local configured credential values and recognized patterns without printing matches. Inspect the staged file list too. A clean scan is scoped evidence, not proof that arbitrary future files are safe.
+- This source tree uses original CSS/text artwork. PayPal SDK assets are remotely supplied by PayPal. MIT root license and locally installed third-party license/notice texts are retained; platform binary packages declare MIT and refer to parent notices. `node_modules`/built binaries are not distributed in the source snapshot.
+
+## $0 hosting assessment — 2026-11-04
+
+| Route | Card/billing/expiration/quota evidence | Decision |
+|---|---|---|
+| Local self-run | Existing machine; local OSS has no hosting card, expiration or usage bill. Gemini/PayPal remain subject to their separate verified free/Sandbox gates. | Recommended; README and judge-access guide supplied. No new service. |
+| Render Free Node web service | 750 free instance hours/month; sleeps after 15 minutes. Local file changes disappear on spin-down/restart/redeploy; free persistent disks unavailable. Bandwidth/build overages can bill with a payment method, otherwise suspend/stop builds. No fixed free web-service expiration established; exact included bandwidth/build allotments and any account-specific card verification not confirmed. | Not selected or authorized. Losing records/counters violates this app's required persistence, and unknown billing/card conditions fail G0. No signup/provisioning. |
+
+Sources: [Render free-service documentation](https://render.com/docs/free), [Render pricing](https://render.com/pricing). This is an assessment, not confirmation of an eligible owner account. Do not work around lost local state by adding a database, paid disk, card or different cloud service. A public shared-key deployment would also require separate access/abuse controls and owner authorization; none are added in M5.
+
+The [hackathon rules](https://paypalaihackathon.devpost.com/rules) allow a runnable local build with complete instructions. [JUDGE_ACCESS.md](JUDGE_ACCESS.md) documents that option and its credential requirements. Thus optional hosting limitations do not require expanding the MVP.
+
+## Remaining publication/submission actions
+
+Separate owner authorization is required to create/push a public repository under Sizwe-the-Knight. Then the submission needs its real source URL, the working public YouTube video under three minutes, Devpost project description/AI and PayPal usage/sandbox limitations, screenshots, and the chosen judge-access/support details. No public URL is invented here. Do not mark submission complete before it actually happens.
+
+This release candidate is intended for code freeze: no further feature/redesign work; only owner-authorized blocking release/safety fixes. The locked deadline is November 12, 2026, 22:00 SAST; internal target November 11, 18:00 SAST; Foundation code-freeze cutoff remains November 10, 18:00 SAST. Evidence and commit IDs are in TRACKER.md and local Git history.
