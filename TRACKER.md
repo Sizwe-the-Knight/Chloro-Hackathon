@@ -2,7 +2,7 @@
 
 **As of:** 2026-11-04 (SAST)  
 **Foundation:** v1.0 / LOCKED  
-**Overall state:** M0–M5, M4.1 and M5.1 PASS — two fictional demo passports connected to the existing inquiry/approval/checkout flow; M5.1 verified with focused mocks and local UI, not additional live provider calls. M5 local release evidence preserved; final M5.1 source snapshot/publication and M6 remain later authorized work.
+**Overall state:** M0–M5, M4.1 and M5.1 PASS. M6 GitHub publication subtask PASS: completed M5.1 source published to the owner-authorized public repository. Full M6 remains IN PROGRESS; video, Devpost submission and confirmed judge-access/support arrangements are outstanding. Hosting/deployment remains unauthorized.
 
 **Official deadline:** Thu Nov 12, 2026 **22:00 SAST**  
 **Internal target:** Wed Nov 11 **18:00 SAST**  
@@ -28,7 +28,7 @@
 | M4.1 | Nov 4 (owner-authorized) | Final traveler UI/UX refinement only | Welcoming AI-first home; accessible palette/mobile navigation; existing seeded data and honest empty states; preserve inquiry/approval/payment/collection and evidence | PASS — focused UI/contrast/navigation checks, typecheck and build; no live provider calls or backend changes |
 | M5 | Nov 10 | Release gate & freeze | Public-readiness review; root license, README, env example, minimal deployment or self-run, secret/license scan, reproducible install/build, freeze code by 18:00. | PASS — 2026-11-04: local release snapshot, source/index/history scan, notices, documented self-run and clean install/build/startup; no publication |
 | M5.1 | Nov 4 (owner-authorized) | Demonstration depth | Preserve bracelet journey; add one fictional food passport using existing AI, human-approved exact terms, Sandbox checkout and collection; shared seller disclosed; focused merchant/offer/payment-boundary checks | PASS — 2026-11-04: Kota profile and connected flow implemented; five mocked checks, typecheck/build and local UI review pass; no new live AI/payment calls |
-| M6 | Nov 11 | Video and submit | YouTube public video <3 min; Devpost project description/tool explanations; public repository; submitted by 18:00. | NOT STARTED |
+| M6 | Nov 11 | Video and submit | YouTube public video <3 min; Devpost project description/tool explanations; public repository; submitted by 18:00. | IN PROGRESS — GitHub publication subtask PASS (2026-11-04); video/Devpost/submission remain uncompleted and outside this task's authorization |
 | M7 | Nov 12 | Contingency only | Fix blocking submission issues only, if needed; official cutoff 22:00 SAST. | NOT STARTED |
 
 ## First actions (owner-managed, free only)
@@ -215,6 +215,19 @@ The initial blocked assessment below is historical and is superseded by the M1 c
 - **M5.1 PASS** for implemented local demonstration depth with mocked new-scenario evidence. No concrete implementation blocker remains. Deferred: third cooking profile; live food-specific evidence (not required/repeated in this task). M6 still needs explicitly authorized final source review/snapshot/publication, actual public source URL, under-three-minute public YouTube demo, Devpost description/screenshots/submission and owner confirmation of judge access/support through December 15. No M6 work, hosting/deployment or external account changes started.
 - Cost/scope gate: actual stage cash outlay **$0.00**, recorded project spend/ceiling **$0.00**; no new charges reported, service, billing activation, paid fallback, new account, delivery, booking, onboarding, marketplace or infrastructure. Existing free model and Sandbox account retained. No deadline or locked scope requirement modified.
 
+## M6 — GitHub publication only — 2026-11-04 (SAST)
+
+- Owner created the Public repository and explicitly authorized publication only to **https://github.com/Sizwe-the-Knight/Chloro-Hackathon.git**. Public source URL: **https://github.com/Sizwe-the-Knight/Chloro-Hackathon**. All governing documents read in full; no Foundation/AGENTS changes or other milestone work authorized.
+- Initial local state: branch main at c1b97b2d62d282c1c2cc13f4b84219e7f8d92932, no origin, expected 14 M5.1 changed/new files. Repository-only Sizwe-the-Knight identity and GitHub noreply email retained; no global identity or account settings changed. GitHub public metadata confirmed visibility Public and git ls-remote returned no refs before publication.
+- Release commit **c45d009c02d5a4363681535153db99e44d8d1d77** includes the completed M5.1 changes and publication-context documentation. No new app features, dependencies, tests or refactoring. This task only added repository/publication wording to README.md, docs/JUDGE_ACCESS.md and docs/RELEASE_READINESS.md; TRACKER.md records the publication result. Previous M5/M5.1 build/test evidence reused without reruns.
+- Targeted pre-push scan: **pnpm release:check PASS**, 39 candidate files, 39 exact index blobs, 74 reachable/reflog history objects and seven known credential/encoded-value checks, with **0 findings**. Supplemental source/index/history audit compared eight private local order/capture/idempotency/credential-like record values, finding **0 matches**. No enabled local hook files or committed GitHub workflows were present. Root .env.example has blank credential values. These are scoped heuristic and known-value checks, not an unlimited guarantee about arbitrary future content.
+- Publication manifest reviewed: application source, lockfile, README.md, root MIT LICENSE, THIRD_PARTY_NOTICES.md, blank .env.example, governing/evidence documents and both judge/release guides included. .env, API keys, PayPal Sandbox passwords, private local-data records/full payment receipts, node_modules, dist/build and private ZIP archives are excluded from the pushed source/history. No personal buyer/account information was identified in publishable files. Redacted Sandbox evidence remains in this Tracker; full private records stay local. Explicit git check-ignore verified the protected paths; no private file was force-added.
+- Added origin exactly as authorized; rechecked it and the empty remote immediately before **git push --set-upstream origin main:main**. Push succeeded as a new branch, with no force, unrelated history overwrite, tags, paid features, service provisioning or account-settings change.
+- Public verification: git ls-remote main equals release SHA c45d009c02d5a4363681535153db99e44d8d1d77. Unauthenticated GitHub API returned Public visibility, all **39 file paths/blob hashes exactly matching** the local release tree, required source/notices/judge guides present, README available, MIT license detected. Logged-out GitHub page visibly displayed main, the release commit, source folders, rendered five-stage README and MIT license. The first metadata check compared a ref-resolved API response's top-level SHA with a tree SHA; its mismatch was resolved by comparing the complete file/blob manifest instead. No source discrepancy was found.
+- This evidence-only Tracker update is committed and pushed after source verification; its resulting final commit SHA is available in Git history/owner completion report rather than circularly embedding its own hash. No completed payment receipt, AI counter or credential file was changed. Original protected-file hashes are checked again at task closure; no app/provider process or live PayPal/Gemini call was needed.
+- **GitHub publication subtask: PASS. Full M6: IN PROGRESS, not PASS.** Original acceptance still needs the public YouTube demo under three minutes, Devpost description/tool explanations/screenshots, actual submission by November 11 18:00 SAST and confirmed judge-access/support arrangements through December 15. No video/submission/hosting actions started here. Official deadline remains November 12, 2026, 22:00 SAST.
+- Cost/scope: actual task cash spend **$0.00**, recorded project total/ceiling **$0.00**, no new service charges reported. Only ordinary source commits/pushes to the owner-created repository; no GitHub Actions workflows, LFS, paid plan, billing activation, deployment, hosting, new dependency, tests or feature expansion. Remaining M6 work requires separate explicit authorization.
+
 ## Scope freeze / change requests
 
 | CR ID | Date | Proposed change | Budget impact | Deadline impact | Owner decision | Implemented? |
@@ -240,6 +253,7 @@ The initial blocked assessment below is historical and is superseded by the M1 c
 | 2026-11-04 | M5 | Clean 37-file source export; offline frozen install; release-affected mocked checks; typecheck/build; empty-state local startup | Reproducible release without private evidence or credentials | 98 reused/0 downloaded packages; 4+2 focused tests pass; typecheck/build pass; HTTP startup/empty state/.env exclusion pass | PASS |
 | 2026-11-04 | M5 | Source/index/history credential scan and publication boundary/license review | No configured secrets/private records staged or committed; license present | Initial commit fc003eda60d1feecc794619e40c92d32b68fd19c; 0 scan findings; private paths ignored; MIT + notices; no remote/push | PASS — scoped heuristic evidence |
 | 2026-11-04 | M5.1 | pnpm test:m51; pnpm typecheck; pnpm build; local provider-disabled UI; protected-file hashes | Merchant/offer association and safe food flow; preserve prior evidence | Five mocked checks pass; typecheck/build pass once; food passport/keyboard switching/old Paid view reachable; original files unchanged; zero live calls | PASS |
+| 2026-11-04 | M6 publication only | Exact index/history scans; private-value/path exclusion checks; non-forced main push; unauthenticated API/browser review | Safely publish completed M5.1 source to authorized repo | Release c45d009c02d5a4363681535153db99e44d8d1d77 public; 39 public blobs match; README/MIT/notices/judge docs visible; 0 scan findings; no test/live-call repetition | PASS — publication only; full M6 incomplete |
 
 ## Blockers log
 
@@ -261,7 +275,8 @@ The initial blocked assessment below is historical and is superseded by the M1 c
 - M4.1 completion: owner-authorized traveler UI refinement and separate Merchant Holdings navigation; focused UI/contrast/navigation checks and typecheck/build passed. No backend/data/provider/dependency changes or live calls. M4 remains PASS, M4.1 PASS, M5 pending.
 - M5 completion: local source candidate fc003eda60d1feecc794619e40c92d32b68fd19c scanned and clean-copy install/changed checks/typecheck/build/startup passed. MIT/notices and judge self-run instructions prepared, no new providers/deployment/push. Source frozen for release; final evidence commit records these results. M5 PASS, M6 not started.
 - M5.1 completion: second fictional Kota profile within the existing two-passport Foundation fence; validated merchant selection, Gemini context, existing approval/payment/collection flow and profile-aware UI. Five mocked checks/typecheck/build and local UI pass; original files/counters unchanged, no provider calls/spend/publication. M5 PASS preserved; M5.1 PASS.
-- Next single action (recommendation only): owner authorize M6 final publication/submission work and confirm the documented judge-access plan; do not start M6 in this task.
+- M6 GitHub publication only: owner-authorized public source at https://github.com/Sizwe-the-Knight/Chloro-Hackathon, release c45d009c02d5a4363681535153db99e44d8d1d77 includes M5.1; targeted scans pass; public source/README/MIT verified; no deployment/tests/live provider calls. Publication subtask PASS; full M6 IN PROGRESS.
+- Next single action (recommendation only): owner authorize remaining M6 video/Devpost submission work and confirm the documented judge-access plan; do not begin it in this GitHub-only task.
 
 ## Daily close-out (complete only on days work is done)
 
@@ -281,7 +296,7 @@ Next single action:
 
 ## Submission checklist
 
-- [ ] Public repo with all source/assets; root LICENSE and README
+- [x] Public repo with source/assets, root LICENSE and README: https://github.com/Sizwe-the-Knight/Chloro-Hackathon (M6 publication subtask verified 2026-11-04)
 - [x] Source/index/history credential-pattern and license/notice checks passed in M5; future added content must be rechecked
 - [x] Complete local setup/run instructions and clean-source reproduction verified; live judging requires eligible privately configured free/Sandbox credentials
 - [x] PayPal sandbox transaction proven end-to-end (owner-confirmed buyer approval and local PAID/order/capture record verified 2026-11-04; clearly labeled Sandbox)
