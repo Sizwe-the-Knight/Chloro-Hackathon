@@ -3,7 +3,7 @@
 **As of:** 2026-11-06 (SAST)
 
 **Foundation:** v1.0 / LOCKED  
-**Overall state:** M0–M5, M4.1 and M5.1 PASS. M6 GitHub publication subtask PASS. Owner selected local self-run and deferred public hosting. The Kota Counter English-to-isiZulu inquiry passed live verification. The other directions of the new two-way translation flow have mocked evidence. Full M6 remains IN PROGRESS pending the public video, Devpost submission and confirmation of judge access/support.
+**Overall state:** M0–M5, M4.1 and M5.1 PASS. Final M6 source publication and local judge setup PASS. Public hosting is deferred. The Kota Counter English-to-isiZulu inquiry passed live verification. The other directions of the new two-way translation flow have mocked evidence. The owner confirmed judge support through December 21. Full M6 remains IN PROGRESS pending the public video and Devpost submission.
 
 **Official deadline:** Thu Nov 12, 2026 **22:00 SAST**  
 **Internal target:** Wed Nov 11 **18:00 SAST**  
@@ -29,7 +29,7 @@
 | M4.1 | Nov 4 (owner-authorized) | Final traveler UI/UX refinement only | Welcoming AI-first home; accessible palette/mobile navigation; existing seeded data and honest empty states; preserve inquiry/approval/payment/collection and evidence | PASS — focused UI/contrast/navigation checks, typecheck and build; no live provider calls or backend changes |
 | M5 | Nov 10 | Release gate & freeze | Public-readiness review; root license, README, env example, minimal deployment or self-run, secret/license scan, reproducible install/build, freeze code by 18:00. | PASS — 2026-11-04: local release snapshot, source/index/history scan, notices, documented self-run and clean install/build/startup; no publication |
 | M5.1 | Nov 4 (owner-authorized) | Demonstration depth | Preserve bracelet journey; add one fictional food passport using existing AI, human-approved exact terms, Sandbox checkout and collection; shared seller disclosed; focused merchant/offer/payment-boundary checks | PASS — 2026-11-04: Kota profile and connected flow implemented; five mocked checks, typecheck/build and local UI review pass; no new live AI/payment calls |
-| M6 | Nov 11 | Video and submit | YouTube public video <3 min; Devpost project description/tool explanations; public repository; submitted by 18:00. | IN PROGRESS — GitHub publication subtask PASS (2026-11-04); video/Devpost/submission remain uncompleted and outside this task's authorization |
+| M6 | Nov 11 | Video and submit | YouTube public video <3 min; Devpost project description/tool explanations; public repository; submitted by 18:00. | IN PROGRESS — final source and judge access verified (2026-11-06); public video and Devpost submission pending |
 | M7 | Nov 12 | Contingency only | Fix blocking submission issues only, if needed; official cutoff 22:00 SAST. | NOT STARTED |
 
 ## First actions (owner-managed, free only)
@@ -270,6 +270,15 @@ The initial blocked assessment below is historical and is superseded by the M1 c
 - Gemini flagged unspecified ingredients for clarification. The request remained `NEEDS_CLARIFICATION` with no quoted price, confirmed availability, approved offer or buyer acceptance. November 6 usage finished at **1/20**, with AI unpaused. Prior inquiries and both payment records were preserved. Zero PayPal calls, retries, model changes or fallbacks.
 - **$0.00 task spend.** One standard text request on the owner-confirmed unbilled Free Tier. Evidence added to TRACKER.md and the normal inquiry result saved locally. No code, build, publication or deployment changes. Local HEAD `1e535830405b6f55a097ef20b880f4bb8bea3c05`; no new commit. This clears the provider blocker for the one tested request. Any live reply or Spanish-direction verification requires separate authorization. Full M6 remains IN PROGRESS.
 
+## M6 — final source publication and judge access — 2026-11-06 (SAST)
+
+- **PASS for final source publication and local-run setup.** The reviewed release commit `912cb99215845fbba3cbe6cbfeaf0edb72c44b45` was pushed by fast-forward to public `main`. Unauthenticated GitHub verification matched all 41 paths and blob hashes and confirmed the rendered README and judge guide, the MIT license and enabled Issues. The follow-up Tracker commit records this evidence. [Public release](https://github.com/Sizwe-the-Knight/Chloro-Hackathon/commit/912cb99215845fbba3cbe6cbfeaf0edb72c44b45)
+- The release includes profile-selected Spanish and isiZulu inquiry translation, explicit translation of merchant replies to English, and the merchant review UI. The original text and translation are separate from approved commercial terms. The live English-to-isiZulu Kota inquiry and the prior Craft Studio Sandbox journey remain verified. For Kota, the owner reported recording the flow, and a local read-only check confirmed the merchant-approved offer matched the traveler-accepted paid order and both handoff entries. The new Craft Studio direction and both reply directions retain mocked evidence. No recording files, receipt files or usage stores are included.
+- An isolated export of the exact staged source installed 98 locked packages from the existing cache with lifecycle scripts disabled. Typecheck and build passed. The documented development entry point served the app with empty inquiry history, both providers disabled and access to `/.env` denied. No unrelated test suites, Gemini calls or PayPal calls. Clean setup still requires evaluator-owned eligible Gemini and Sandbox credentials for live interaction.
+- The publication scan found zero matches across 41 source files, 41 index blobs, 97 reachable and reflog objects and seven configured credential comparisons at the release commit. The supplemental scan found zero matches against 12 private local record values and excluded recording media, private data and build paths. The protected Foundations, agent instructions, local configuration and local records were preserved.
+- The owner selected self-run judging and confirmed GitHub Issues support through **December 21, 2026**. The guide explains local-only addressing, credential setup and how to request help with no-cost access. Individual evaluator eligibility and future provider availability depend on their accounts and quota. [Judge access](docs/JUDGE_ACCESS.md) · [Official rules](https://paypalaihackathon.devpost.com/rules)
+- **$0.00 task spend.** Full M6 remains **IN PROGRESS**. Publish the public YouTube demo under three minutes, complete the Devpost description, tools and screenshots, submit and retain confirmation. Internal target November 11 at 18:00 SAST. Official deadline November 12 at 22:00 SAST.
+
 ## Scope freeze / change requests
 
 | CR ID | Date | Proposed change | Budget impact | Deadline impact | Owner decision | Implemented? |
@@ -354,4 +363,4 @@ Next single action:
 - [ ] Under-3-minute public YouTube demo
 - [ ] Devpost description + AI/PayPal tools + screenshots
 - [ ] Submission completed and confirmation retained by Nov 11 target
-- [ ] Demo access/support plan through Dec 15
+- [x] Local self-run and owner-confirmed GitHub Issues support through Dec 21, 2026
