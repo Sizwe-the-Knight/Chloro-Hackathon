@@ -4,16 +4,23 @@ AI-assisted local commerce for travelers and two fictional demonstration merchan
 
 This is an independent hackathon demonstration, not an official PayPal product. **Sandbox only. No real money. MIT licensed: [LICENSE](LICENSE).** See [TRACKER.md](TRACKER.md) for actual milestone evidence and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for dependency licenses.
 
-Source repository: [Sizwe-the-Knight/Chloro-Hackathon](https://github.com/Sizwe-the-Knight/Chloro-Hackathon). Owner-authorized source publication is separate from hosting and hackathon submission.
+Judges run Chloro on their own computers. Start with [Windows setup](#windows-setup) and the [judge access guide](docs/JUDGE_ACCESS.md) for test credentials, a walkthrough and support through December 21, 2026.
 
 ## Windows setup
 
-Requires **Node.js 24.x**, **pnpm 11.25.0**, Git (for source checkout/release checks), a modern browser, and network access to the npm registry, PayPal Sandbox and the Gemini API. No Docker, WSL, Codex trial, hosting or database account is needed to run the source. Source and the lockfile pin the tested dependencies.
+Requires **Node.js 24.x** (tested with 24.21.0), **pnpm 11.25.0**, a modern browser and network access to the npm registry, PayPal Sandbox and the Gemini API. Use Git to clone the repository, or download its source ZIP. If pnpm is missing, install it with `npm install --global pnpm@11.25.0`. The lockfile pins the tested dependencies.
 
-From the downloaded/cloned project directory in PowerShell:
+Clone the public repository and open the project directory in PowerShell. If you downloaded the source ZIP, extract it and open the extracted project directory instead.
 
 ```powershell
-pnpm install --frozen-lockfile --ignore-scripts
+git clone https://github.com/Sizwe-the-Knight/Chloro-Hackathon.git
+Set-Location Chloro-Hackathon
+```
+
+Install the locked dependencies and create your local configuration.
+
+```powershell
+pnpm install --prod=false --frozen-lockfile --ignore-scripts
 if (-not (Test-Path -LiteralPath '.env')) {
     Copy-Item -LiteralPath '.env.example' -Destination '.env'
 }
@@ -32,7 +39,7 @@ Open `.env` in your local editor. Keep an existing file. Never paste secrets int
 | `AI_MAX_CALLS_PER_DAY` | `20`; server enforces a hard maximum of 20 attempted calls per SAST day |
 | `PORT` | `3000`, or another unused local port |
 
-The confirmation flag is an owner/operator attestation, not an API billing detector. If a signup asks for a card, billing activation or uncertain charges, **stop**. No paid fallback is permitted. The [judge-access guide](docs/JUDGE_ACCESS.md) explains the no-public-secrets approach.
+The Free Tier flag records your own verification. If setup requires a card, billing activation or uncertain charges, stop and use the access procedure in the judge guide. It walks through obtaining a Gemini key, a Sandbox REST app and a separate Sandbox buyer. [Judge access and credentials](docs/JUDGE_ACCESS.md#obtain-your-own-test-credentials)
 
 Run development:
 
@@ -49,31 +56,30 @@ $env:NODE_ENV = 'production'
 pnpm start
 ```
 
-Open the printed localhost URL (normally `http://localhost:3000`). Stop the older app with Ctrl+C before restarting. Use **one process per local data directory**. The server binds to loopback; this source has not been hardened or configured for public hosting. A port conflict is an error, not a reason to delete payment data.
+Open the printed URL (normally `http://localhost:3000`) on the computer where you started Chloro. **Localhost refers to your own computer.** Public hosting is deferred because the demonstration shares local session state and relies on local files for payment checkpoints. Stop the app with Ctrl+C before restarting and use one process per local data directory.
 
-Without local credentials you can inspect the home/category/empty states; live AI and checkout correctly remain unavailable. A clean checkout has no paid fixtures. Do not mistake this for a broken install or expect the owner's saved records to appear.
+Start from a fresh checkout or newly extracted source directory to get an empty inquiry history. Open **Merchant Holdings** to see **No inquiries yet.** The owner's recordings, receipts and local data are separate from the public source. You can inspect the UI before configuring credentials. Live inquiry and checkout require your own eligible test credentials.
 
 ## Run a fresh judge demonstration
 
-1. **Discover:** Start in **Local Offerings**. Choose Goods & Crafts for fictional Chloro Craft Studio or Food & Drink for fictional Chloro Kota Counter. Both speak English and offer local collection only, subject to human approval. Saved Merchants reflects your local inquiry history. Categories are reversible filters, with no live inventory or availability claim.
-2. **Inquire:** Enter a fictional request such as “A handmade blue nickel-free bracelet, 17 cm.” Destination is optional user-entered context, not a location lookup or a claim of merchant coverage. **Prepare my inquiry** carries the draft into the seeded merchant passport and constraint form; it makes no AI call. Enter your language, USD 40.00 budget and a **future** departure/latest collection time in SAST. Choose **Send inquiry to Gemini** once. Review the original, English translation, traveler-language summary and structured constraints. Missing/ambiguous details require clarification; no result is fabricated when AI is unavailable.
-3. **Commit:** Open **Merchant Holdings** on the same page. This is a demo role switch, not an authenticated account. Accept for review or decline with a reason. Enter the exact item, USD 35.00, a **future ready time before departure**, fictional pickup location and local terms. Record any necessary human clarification and explicitly approve. Choose **Review as traveler**, review the exact offer, check acceptance and accept its version. No money moves at acceptance.
-4. **Pay:** Choose **Start PayPal sandbox checkout**, then PayPal. Use your **Personal sandbox buyer**, not a real login. The backend creates a new order from that inquiry's server-owned accepted offer. Buyer approval alone is not Paid: the server must verify a COMPLETED capture, amount, currency and order/quote association. Record the confirmation once; do not charge again to revisit it.
-5. **Collect:** Paid shows the agreed location, ready-by time, departure deadline and terms. In Merchant Holdings mark ready; return to traveler review for status. Each role can optionally record its own demo handover. These declarations are not independent proof of fulfillment.
+1. **Discover.** In **Local Offerings**, choose **Food & Drink → Chloro Kota Counter → View merchant & inquire**. To try the bracelet path, choose **Goods & Crafts → Chloro Craft Studio**.
+2. **Inquire.** For Kota Counter, enter “Could you prepare two vegetarian kotas without chilli for pickup before 13:00 tomorrow?” Choose English, a USD 20.00 spending limit and 13:00 tomorrow for latest collection in SAST. Select **Send inquiry to Gemini** once. **Original request & structured AI interpretation** shows the original English, isiZulu translation and extracted requirements. For Craft Studio, try “Could you make a blue nickel-free bracelet, 17 cm, for pickup before 16:00 tomorrow?” with a USD 40.00 budget and a 16:00 deadline. New Craft Studio inquiries translate into Spanish.
+3. **Commit.** Open **Merchant Holdings**, select the request under **Saved inquiry**, and choose **Accept inquiry for review**. To decline instead, enter a reason and select **Decline inquiry**. Resolve any flagged details before approval. For an optional translated reply, write in the merchant's language and select **Translate reply to English**. Enter the exact offer separately, for example two kotas for USD 12.00 or one bracelet for USD 35.00, ready at noon tomorrow, with a fictional pickup point and terms. Check merchant approval and select **Approve final offer**. Choose **Review as traveler**, confirm the exact terms and select **Accept merchant offer**.
+4. **Pay.** Choose **Start PayPal sandbox checkout**, then the PayPal button. Check that PayPal opens in Sandbox and sign in with your separate **Personal Sandbox buyer**. Approve the displayed USD amount using the simulated account balance. Chloro shows **Paid · Sandbox capture verified** after server verification of the completed capture, amount, currency and order association. If payment needs review, inspect the existing Sandbox order before trying again.
+5. **Collect.** After Paid, open **Merchant Holdings**, select **Mark ready for collection** and use **Record merchant handover (demo)**. Choose **Review as traveler** to see the agreed pickup point, ready time and terms, then select **Record traveler collection (demo)**. Chloro shows both sides recorded. This is a simulated handoff using two local demo roles.
 
-To repeat, create a **new inquiry with future times**. Each has separate acceptance, payment and collection state. Never reset or overwrite the earlier M1/M3 records or usage counter. Historical fixed-date receipts can still be inspected; they are not reusable checkout templates. A complete live run normally consumes one AI attempt and one new sandbox purchase. Merely loading pages or refreshing saved status calls no model/payment provider.
+To repeat, create a **new inquiry with future times** and keep any prior records. A live run uses one inquiry attempt and one new Sandbox purchase. An optional reply translation uses a second AI attempt after the five-second minimum interval. Loading or refreshing the app does not call the providers.
 
-### Food & Drink demonstration
+### Verification evidence
 
-Choose **Chloro Kota Counter** before submitting (the inquiry form also has an explicit merchant selector). For example: “Two vegetarian kotas, no chilli, total budget USD 20, for local collection before my departure.” Enter the actual future deadline separately in the form. Gemini organizes quantity/preferences and flags missing details; it cannot confirm ingredients, allergen safety, price or preparation time. The demo merchant reviews the original and interpretation, confirms the complete quantity/item description and human-agreed ingredients, enters an exact **total** price and ready-by time, and explicitly approves. Traveler acceptance, the same Sandbox checkout and collection controls follow the five steps above. Food is local pickup only, with no delivery, menu inventory or real vendor onboarding. USD examples are illustrative, not published food prices or currency conversion.
-
-M5.1 food-specific behavior was verified with mocked AI/payment responses and UI checks, **not a new live food inquiry or payment**. The shared Gemini/PayPal integration retains the previous real bracelet evidence. No third cooking-lesson profile or booking system is included; Foundation 04 caps this MVP at two demo passports.
+- **Kota Counter.** English-to-isiZulu inquiry translation and structured extraction passed live verification. The owner recorded the Kota flow. The saved record shows merchant approval, traveler acceptance, a verified Sandbox capture and both sides of the simulated handoff. Ingredient safety requires human confirmation.
+- **Craft Studio.** An earlier live Spanish traveler inquiry translated into English and led to a verified USD 35.00 Sandbox capture. New English-to-Spanish inquiries and Spanish-to-English merchant replies have mocked verification. Kota Counter's isiZulu-to-English merchant replies also have mocked verification. Saved inquiries retain their original language configuration.
 
 ## Integrations and boundaries
 
 - React/Vite + TypeScript frontend; Express/Node backend; pnpm; local JSON persistence. Production serves frontend and API from one Node process.
 - PayPal JavaScript SDK **v6**, authenticated with a browser-safe client ID; server-side OAuth and **Orders v2** create/capture. Secret stays on the server. Endpoints are hardcoded to Sandbox. Final price/currency come from the merchant-approved canonical offer, never browser-supplied amounts or Gemini output. Accepted terms are fingerprinted; edits require a new reviewed offer rather than silent changes. Duplicate/concurrent capture protection and persisted idempotency keys prevent reuse of a completed order.
-- Gemini **3.5 Flash-Lite**, direct server-side REST with a JSON schema and runtime validation. AI extracts/translates; it does not price, promise stock/readiness, approve offers or pay. Requests are explicit, bounded to 2,000 message characters and bounded output, spaced at least five seconds apart, with one in flight and **20 attempts/day maximum** (SAST), including failures. Quota/provider/invalid-output failures pause calls for that day; no automatic retries, model switching or paid fallback.
+- Gemini **3.5 Flash-Lite** uses server-side REST with a JSON schema and runtime validation. New inquiries use the selected profile's language for the translation and extracted constraints. The traveler language field controls the inquiry summary. An explicit reply request saves the merchant's original text and its English translation separately from the offer. The merchant controls price, availability, readiness and approval. Both request types share the existing **20 attempts/day maximum** (SAST), including failures, with one in flight and a five-second minimum interval. Quota, provider and invalid-output failures pause calls for that day.
 - Seeded suggestions are simple bracelet/kota request-type presentation rules for the selected profile, not global search or live inventory lookup. Selection is fixed on submission; an existing inquiry is never silently reassigned. Server validates the seeded ID/name and fingerprints merchant identity with the accepted commercial terms. Older bracelet inquiries resolve their original merchant name without migration. Human review remains authoritative. USD/EUR/GBP are allowed offer currencies; **only USD has actual payment verification evidence**. ZAR can be a budget currency, with no exchange conversion implied.
 
 ## Persistence, restart and troubleshooting
@@ -103,7 +109,7 @@ pnpm release:check    # source/history credential-pattern and publication checks
 
 Tests use mocked providers; they do not prove a new live transaction. Private receipts are optional integrity evidence, never a test prerequisite. Release work uses only changed/necessary checks plus typecheck/build, not repeated live calls. The release checker compares against locally configured credential values and common patterns without printing them; heuristic scanning is not a universal guarantee against every unknown secret.
 
-See [release and hosting assessment](docs/RELEASE_READINESS.md). The owner created the public repository above and authorized source publication in M6; publication evidence is in TRACKER.md. No hosted app URL is provided. Deployment remains unauthorized. Remaining submission work includes a public YouTube demo under three minutes, Devpost description/screenshots/submission and confirmed usable access through December 15. Official deadline **November 12, 2026, 22:00 SAST**; internal target **November 11, 18:00 SAST**.
+For setup or provider eligibility issues through December 21, 2026, use [the judge support instructions](docs/JUDGE_ACCESS.md#judge-support-through-december-21-2026).
 
 ## License and attribution
 

@@ -25,6 +25,7 @@ export function inquiryRouter(gateway:Gateway,reservedOrderIds:()=>string[],opti
   router.get('/',(_req,res)=>res.json(service.view()));
   router.post('/',async(req,res)=>res.json(await service.submit(req.body)));
   router.post('/:id/review',(req,res)=>res.json(service.review(req.params.id,req.body.action,req.body.reason)));
+  router.post('/:id/reply',async(req,res)=>res.json(await service.translateMerchantReply(req.params.id,req.body)));
   router.post('/:id/offer',(req,res)=>res.json(service.approve(req.params.id,req.body)));
   router.post('/:id/accept',(req,res)=>res.json(service.acceptOffer(req.params.id,req.body.version,req.body.accepted)));
   router.get('/:id/payment',(req,res)=>res.json(commerce.status(req.params.id)));

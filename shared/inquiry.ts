@@ -12,11 +12,18 @@ export type MerchantOffer = {
   description: string; amount: string; currency: string; pickupLocation: string;
   readyAt: string; collectionTerms: string; clarification: string;
 };
+export type ReplyTranslation = { translatedReply: string; uncertainties: string[] };
+export type MerchantReply = { original: string } & (
+  { status: 'TRANSLATING' } |
+  { status: 'TRANSLATED'; translation: ReplyTranslation } |
+  { status: 'ERROR'; error: string }
+);
 export type Inquiry = {
   merchantId?: MerchantId;
   id: string; createdAt: string; input: InquiryInput; merchant: string; merchantLanguage: string;
   status: 'INTERPRETING' | 'AI_ERROR' | 'NEEDS_CLARIFICATION' | 'AWAITING_MERCHANT' |
     'MERCHANT_REVIEW' | 'DECLINED' | 'OFFER_APPROVED' | 'BUYER_ACCEPTED';
   interpretation?: Interpretation; error?: string; declineReason?: string;
+  merchantReply?: MerchantReply;
   offer?: MerchantOffer & {version: number; merchantApproved: true}; acceptedVersion?: number;
 };

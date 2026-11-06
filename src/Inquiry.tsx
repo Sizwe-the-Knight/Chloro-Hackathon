@@ -28,6 +28,7 @@ export function InquiryExperience() {
   const inquiry=view?.inquiries.find(i=>i.id===selected)??view?.inquiries.at(-1);
   const merchant=merchantById(merchantId)!;
   const requestMerchant=inquiry&&merchantForInquiry(inquiry);
+  const aiAvailable = !!view?.ai.configured && !view.ai.paused && view.ai.used < 20;
   const saved=demoMerchants.filter(m=>view?.inquiries.some(i=>merchantForInquiry(i)?.id===m.id));
   function navigate(next:typeof screen,nextRole:typeof role='traveler'){if(busy)return;setScreen(next);setRole(nextRole);}
   const begin=()=>{setMerchantId(category==='food'||/\bkotas?\b/i.test(message)?'food':'craft');navigate('inquiry');};
@@ -52,8 +53,8 @@ export function InquiryExperience() {
         <label>Destination (optional)<input value={destination} maxLength={80} onChange={e=>setDestination(e.target.value)} placeholder="User-entered context only"/></label>
         <div className="fields"><label>Your language<input name="language" required maxLength={50} defaultValue="English"/></label><label>Spending limit<input name="budget" type="number" required min="0.01" max="999999.99" step="0.01" placeholder="40.00"/></label><label>Budget currency<select name="currency"><option>USD</option><option>ZAR</option><option>EUR</option><option>GBP</option></select></label></div>
         <label>Latest collection / departure (SAST)<input name="departure" type="datetime-local" required/></label><p className="small">Use fictional details. Gemini translates and organizes your request for this merchant. It cannot set a price, promise availability or decide to pay.</p>
-        <button className="primary-action" disabled={!view?.ai.configured||!!view.ai.paused||view.ai.used>=20} type="submit">{busy?'Interpreting…':'Send inquiry to Gemini'} <span aria-hidden="true">↗</span></button>
-      </fieldset></form></section><aside className="inquiry-context"><p className="eyebrow">DISCOVERED MERCHANT PASSPORT</p><h2>{merchant.name}</h2><p>{merchant.category} · {merchant.requests}</p><p>English-speaking fictional demonstration merchant. Local collection only; the merchant must confirm location, price and readiness.</p><span className="category-label">NO LIVE INVENTORY OR AVAILABILITY CLAIM</span><p className="small">Two fictional profiles share one Sandbox seller account, with no separate payouts. Select the intended merchant before submitting; destination does not imply coverage.</p>{merchant.id==='food'&&<p className="small">Include quantity, food preferences and collection deadline. Confirm ingredients and any dietary concerns directly with the demo merchant; AI cannot promise allergen safety.</p>}<button className="text-button" disabled={busy} onClick={()=>navigate('home')}>Back to Local Offerings</button></aside></div>}
+        <button className="primary-action" disabled={!aiAvailable} type="submit">{busy?'Interpreting…':'Send inquiry to Gemini'} <span aria-hidden="true">↗</span></button>
+      </fieldset></form></section><aside className="inquiry-context"><p className="eyebrow">DISCOVERED MERCHANT PASSPORT</p><h2>{merchant.name}</h2><p>{merchant.category} · {merchant.requests}</p><p>Merchant language: {merchant.language}. Local collection requires the merchant to confirm location, price and readiness.</p><span className="category-label">NO LIVE INVENTORY OR AVAILABILITY CLAIM</span><p className="small">Two fictional profiles share one Sandbox seller account, with no separate payouts. Select the intended merchant before submitting; destination does not imply coverage.</p>{merchant.id==='food'&&<p className="small">Include quantity, food preferences and collection deadline. Confirm ingredients and any dietary concerns directly with the demo merchant; AI cannot promise allergen safety.</p>}<button className="text-button" disabled={busy} onClick={()=>navigate('home')}>Back to Local Offerings</button></aside></div>}
       <div className="workspace-toolbar"><p className="small">AI attempts today: {view?.ai.used??'—'} / 20 (SAST). {view&&!view.ai.configured?'Gemini is disabled or missing local Free Tier configuration.':''} {view&&view.ai.used>=20?'Daily limit reached. Do not activate billing or reset the counter.':''}</p><button className="text-button" disabled={busy} onClick={()=>void action(refresh)}>Refresh inquiries</button>{role==='traveler'&&<button className="text-button" disabled={busy} onClick={begin}>New inquiry</button>}</div>
       {view?.ai.paused&&<p role="alert" className="notice">{view.ai.paused}</p>}
       {screen==='request'&&<>
@@ -66,16 +67,55 @@ export function InquiryExperience() {
           </>}
           <details className="interpretation-details" open={!inquiry.offer||role==='merchant'}><summary>Original request & structured AI interpretation</summary>
           <dl><dt>Original traveler message ({inquiry.input.travelerLanguage})</dt><dd className="preserve">{inquiry.input.message}</dd><dt>Traveler spending limit</dt><dd>{inquiry.input.currency} {inquiry.input.budget}</dd><dt>Latest collection / departure</dt><dd>{time(inquiry.input.departure)}</dd></dl>
-          {inquiry.interpretation&&<><h3>Gemini interpretation · review for accuracy</h3><dl><dt>Translated request for merchant (English)</dt><dd className="preserve">{inquiry.interpretation.translatedRequest}</dd><dt>Requested item</dt><dd>{inquiry.interpretation.item??'Not specified — clarification needed'}</dd><dt>Preferences</dt><dd>{inquiry.interpretation.preferences.join('; ')||'None specified'}</dd><dt>Budget interpretation</dt><dd>{inquiry.interpretation.budgetConstraint??'Not extracted'}</dd><dt>Deadline interpretation</dt><dd>{inquiry.interpretation.deadlineConstraint??'Not extracted'}</dd><dt>Other constraints</dt><dd>{inquiry.interpretation.constraints.join('; ')||'None specified'}</dd><dt>Missing details / clarification questions</dt><dd>{inquiry.interpretation.missingDetails.join('; ')||'None flagged — still review the original'}</dd><dt>Uncertainty</dt><dd>{inquiry.interpretation.uncertainties.join('; ')||'None flagged — interpretation may still contain errors'}</dd></dl><p className="small">AI organizes the request. The merchant alone determines the final item, price and collection time.</p></>}
+          {inquiry.interpretation&&<><h3>Gemini interpretation · review for accuracy</h3><dl><dt>Translated request for merchant ({inquiry.merchantLanguage})</dt><dd className="preserve">{inquiry.interpretation.translatedRequest}</dd><dt>Requested item (English label)</dt><dd>{inquiry.interpretation.item??'Not specified — clarification needed'}</dd><dt>Preferences</dt><dd>{inquiry.interpretation.preferences.join('; ')||'None specified'}</dd><dt>Budget interpretation</dt><dd>{inquiry.interpretation.budgetConstraint??'Not extracted'}</dd><dt>Deadline interpretation</dt><dd>{inquiry.interpretation.deadlineConstraint??'Not extracted'}</dd><dt>Other constraints</dt><dd>{inquiry.interpretation.constraints.join('; ')||'None specified'}</dd><dt>Missing details / clarification questions</dt><dd>{inquiry.interpretation.missingDetails.join('; ')||'None flagged — still review the original'}</dd><dt>Uncertainty</dt><dd>{inquiry.interpretation.uncertainties.join('; ')||'None flagged — interpretation may still contain errors'}</dd></dl><p className="small">AI organizes the request. The merchant alone determines the final item, price and collection time.</p></>}
           </details>
           {inquiry.status==='DECLINED'&&<p>Merchant response: {inquiry.declineReason}</p>}
           {role==='merchant'&&['AWAITING_MERCHANT','NEEDS_CLARIFICATION','MERCHANT_REVIEW'].includes(inquiry.status)&&<div className="merchant-actions"><button disabled={busy||inquiry.status==='MERCHANT_REVIEW'} onClick={()=>void mutate('review',{action:'accept'})}>Accept inquiry for review</button><form onSubmit={e=>{e.preventDefault();const f=new FormData(e.currentTarget);void mutate('review',{action:'decline',reason:f.get('reason')});}}><label>Reason for declining<input name="reason" required maxLength={500}/></label><button className="secondary-action" disabled={busy}>Decline inquiry</button></form></div>}
+          <MerchantReplyPanel inquiry={inquiry}
+            canWrite={role==='merchant'&&requestMerchant?.language===inquiry.merchantLanguage&&
+              (inquiry.status==='MERCHANT_REVIEW'||inquiry.status==='OFFER_APPROVED')}
+            disabled={busy||!aiAvailable} translate={message=>mutate('reply',{message})}/>
           {role==='merchant'&&inquiry.status==='MERCHANT_REVIEW'&&<><p className="small">Confirm the complete item and quantity, exact total price, collection location and ready-by time. Nothing here is pre-approved by AI.</p><MerchantForm busy={busy} approve={body=>mutate('offer',body)}/></>}
           {inquiry.offer&&<OfferReview inquiry={inquiry} traveler={role==='traveler'} busy={busy} accept={()=>mutate('accept',{version:inquiry.offer!.version,accepted:true})}/>}
         </section>:<section className="empty-state"><h2>No inquiries yet.</h2><p>Start in Local Offerings to prepare a traveler request. Nothing is generated until the traveler explicitly submits it.</p><button className="secondary-action" onClick={begin}>Prepare an inquiry</button></section>}
       </>}
     </>}
     <p className="demo-disclosure">Fictional demonstration merchants · One PayPal Sandbox business account · Local collection only · No real money</p>
+  </div>;
+}
+
+function MerchantReplyPanel({inquiry,canWrite,disabled,translate}:{
+  inquiry:Inquiry;canWrite:boolean;disabled:boolean;translate:(message:FormDataEntryValue|null)=>Promise<void>;
+}) {
+  const reply = inquiry.merchantReply;
+  const showForm = canWrite && (!reply || reply.status==='ERROR');
+  if (!reply && !showForm) return null;
+  function submit(event:FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    void translate(new FormData(event.currentTarget).get('reply'));
+  }
+  return <div className="merchant-actions">
+    <h3>Merchant reply</h3>
+    {reply&&<dl>
+      <dt>Original merchant reply ({inquiry.merchantLanguage})</dt>
+      <dd className="preserve">{reply.original}</dd>
+      {reply.status==='TRANSLATED'&&<>
+        <dt>Gemini translation (English)</dt>
+        <dd className="preserve">{reply.translation.translatedReply}</dd>
+        {reply.translation.uncertainties.length>0&&<>
+          <dt>Translation uncertainties</dt><dd>{reply.translation.uncertainties.join('; ')}</dd>
+        </>}
+      </>}
+    </dl>}
+    {reply?.status==='TRANSLATING'&&<p role="status">Translating merchant reply…</p>}
+    {reply?.status==='ERROR'&&<p role="alert">{reply.error}</p>}
+    <p className="small">Review the original and translation. The approved offer is the source of price and pickup terms.</p>
+    {showForm&&<form onSubmit={submit}>
+      <label>Write a reply in {inquiry.merchantLanguage}
+        <textarea name="reply" required maxLength={2000} defaultValue={reply?.original} disabled={disabled}/>
+      </label>
+      <button disabled={disabled}>Translate reply to English</button>
+    </form>}
   </div>;
 }
 

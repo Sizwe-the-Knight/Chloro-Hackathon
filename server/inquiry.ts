@@ -1,20 +1,29 @@
 import { randomUUID } from 'node:crypto';
 import { PaymentError } from './payment.js';
-import type { Inquiry, InquiryInput, Interpretation, MerchantOffer } from '../shared/inquiry.js';
+import type { Inquiry, InquiryInput, Interpretation, MerchantOffer, ReplyTranslation } from '../shared/inquiry.js';
 import {PAYMENT_CURRENCIES} from '../shared/commerce.js';
-import {demoMerchants,merchantById} from '../shared/merchants.js';
+import {demoMerchants,merchantById,merchantForInquiry,type MerchantLanguage} from '../shared/merchants.js';
 
 export const MODEL = 'gemini-3.5-flash-lite';
 export const MERCHANT = demoMerchants[0].storedName;
 export const currencies = ['USD', 'ZAR', 'EUR', 'GBP'];
 export type InquiryState = {inquiries: Inquiry[]; usage: {day: string; count: number; lastAt: number; paused?: string}};
 export interface InquiryStore { get(): InquiryState; save(state: InquiryState): void }
-export interface Interpreter { generate(input: InquiryInput): Promise<unknown>; configured(): boolean }
+export interface Interpreter {
+  generate(input: InquiryInput): Promise<unknown>;
+  translateReply?(original: string, language: MerchantLanguage): Promise<unknown>;
+  configured(): boolean;
+}
 export function recoverInterruptedInquiries(state:InquiryState):InquiryState|undefined {
-  if(!state.inquiries.some(i=>i.status==='INTERPRETING'))return;
+  if(!state.inquiries.some(i=>i.status==='INTERPRETING'||i.merchantReply?.status==='TRANSLATING'))return;
   const recovered=structuredClone(state);
-  for(const i of recovered.inquiries)if(i.status==='INTERPRETING'){
-    i.status='AI_ERROR';i.error='The server stopped before this interpretation completed. No AI result was saved. The attempt still counts toward the daily limit; submit a new inquiry only when ready. No automatic retry occurred.';
+  for(const i of recovered.inquiries){
+    if(i.status==='INTERPRETING'){
+      i.status='AI_ERROR';i.error='The server stopped before this interpretation completed. No AI result was saved. The attempt still counts toward the daily limit; submit a new inquiry only when ready. No automatic retry occurred.';
+    }
+    if(i.merchantReply?.status==='TRANSLATING'){
+      i.merchantReply={original:i.merchantReply.original,status:'ERROR',error:'Reply translation was interrupted. The original reply is saved and the attempt still counts.'};
+    }
   }
   return recovered;
 }
@@ -65,14 +74,22 @@ export function validateInterpretation(value: unknown): Interpretation {
   if (!result.item && result.missingDetails.length === 0) throw invalid('AI must flag an unspecified item for clarification.');
   return result;
 }
-export function parseGeminiResponse(data: unknown): Interpretation {
+export function validateReplyTranslation(value: unknown): ReplyTranslation {
+  const reply = object(value);
+  if (Object.keys(reply).length !== 2) throw invalid('Invalid AI reply translation.');
+  return {translatedReply:text(reply.translatedReply,'translated reply',3000), uncertainties:list(reply.uncertainties,'uncertainties')};
+}
+export function parseGeminiResult<T>(data: unknown, validate: (value: unknown) => T): T {
   const candidates = object(data).candidates;
   if (!Array.isArray(candidates) || candidates.length !== 1 || candidates[0]?.finishReason !== 'STOP') throw invalid('Gemini did not return a complete response. No interpretation was generated.');
   const parts = candidates[0]?.content?.parts;
   if (!Array.isArray(parts)) throw invalid('Gemini returned no interpretation.');
   const raw = parts.filter(p => !p.thought).map(p => p.text ?? '').join('');
   if (!raw || raw.length > 16000) throw invalid('Gemini returned an empty or oversized interpretation.');
-  try {return validateInterpretation(JSON.parse(raw));} catch {throw invalid('Gemini returned invalid structured data. No interpretation was accepted.');}
+  try {return validate(JSON.parse(raw));} catch {throw invalid('Gemini returned invalid structured data. No interpretation was accepted.');}
+}
+export function parseGeminiResponse(data: unknown): Interpretation {
+  return parseGeminiResult(data,validateInterpretation);
 }
 export class InquiryService {
   private busy = false;
@@ -84,26 +101,63 @@ export class InquiryService {
     return state;
   }
   view() {const s=this.state();return {inquiries:s.inquiries, ai:{configured:this.ai.configured(),model:MODEL,day:s.usage.day,used:s.usage.count,limit:20,paused:s.usage.paused}};}
-  async submit(value: unknown) {
-    const input = validateInput(value,this.now());
+  private async runAi(s: InquiryState, work: () => Promise<void>, onFailure: () => void) {
     if (!this.ai.configured()) throw new PaymentError('Gemini is disabled or missing verified Free Tier configuration. No AI request was sent.',503);
     if (this.busy) throw new PaymentError('An inquiry is already being interpreted. Please wait.');
-    const s=this.state();
     if (s.usage.paused) throw new PaymentError(s.usage.paused,503);
     if (s.usage.count >= 20) throw new PaymentError('Daily limit reached: 20 AI requests. No request was sent.',429);
     if (s.usage.lastAt && this.now()-s.usage.lastAt < 5000) throw new PaymentError('Wait five seconds between AI requests.',429);
-    const merchant=merchantById(input.merchantId)!;
-    const inquiry: Inquiry = {id:randomUUID(),createdAt:new Date(this.now()).toISOString(),input,merchantId:merchant.id,merchant:merchant.storedName,merchantLanguage:'English',status:'INTERPRETING'};
-    s.inquiries.push(inquiry); s.usage.count++; s.usage.lastAt=this.now();
+    s.usage.count++; s.usage.lastAt=this.now();
     // Persist attempted calls before the network request; failures count toward the hard cap.
-    this.store.save(s); this.busy=true;
+    this.store.save(structuredClone(s)); this.busy=true;
     try {
+      await work();
+    } catch {
+      s.usage.paused='Gemini unavailable or invalid response. AI calls paused for this SAST day; no automatic retry or paid fallback.';
+      onFailure();
+    } finally {this.busy=false; this.store.save(s);}
+  }
+  async submit(value: unknown) {
+    const input = validateInput(value,this.now());
+    const s = this.state();
+    const merchant=merchantById(input.merchantId)!;
+    const inquiry: Inquiry = {id:randomUUID(),createdAt:new Date(this.now()).toISOString(),input,merchantId:merchant.id,merchant:merchant.storedName,merchantLanguage:merchant.language,status:'INTERPRETING'};
+    s.inquiries.push(inquiry);
+    await this.runAi(s, async () => {
       inquiry.interpretation = validateInterpretation(await this.ai.generate(input));
       inquiry.status = inquiry.interpretation.missingDetails.length || inquiry.interpretation.uncertainties.length ? 'NEEDS_CLARIFICATION':'AWAITING_MERCHANT';
-    } catch {
+    }, () => {
       inquiry.status='AI_ERROR'; inquiry.error='Gemini unavailable or invalid response. No interpretation generated. AI calls paused for this SAST day; no automatic retry or paid fallback.';
-      s.usage.paused=inquiry.error;
-    } finally {this.busy=false; this.store.save(s);}
+    });
+    return inquiry;
+  }
+  async translateMerchantReply(id: string, value: unknown) {
+    const original = object(value).message;
+    if (typeof original !== 'string' || !original.trim() || original.length > 2000) {
+      throw invalid('Provide a merchant reply (1–2000 characters).');
+    }
+    const s = this.state();
+    const inquiry = s.inquiries.find(i => i.id === id);
+    if (!inquiry) throw new PaymentError('Inquiry not found.',404);
+    const merchant = merchantForInquiry(inquiry);
+    if (!merchant || inquiry.merchantLanguage !== merchant.language) {
+      throw invalid('Reply translation requires an inquiry in the merchant profile’s current language.');
+    }
+    if (inquiry.status !== 'MERCHANT_REVIEW' && inquiry.status !== 'OFFER_APPROVED') {
+      throw new PaymentError('Review the inquiry before translating a reply.');
+    }
+    if (inquiry.merchantReply && inquiry.merchantReply.status !== 'ERROR') {
+      throw new PaymentError('A reply is already translated or being translated.');
+    }
+    const translateReply = this.ai.translateReply;
+    if (!translateReply) throw new PaymentError('Reply translation is unavailable.',503);
+    inquiry.merchantReply = {original,status:'TRANSLATING'};
+    await this.runAi(s, async () => {
+      const translation = validateReplyTranslation(await translateReply.call(this.ai,original,merchant.language));
+      inquiry.merchantReply = {original,status:'TRANSLATED',translation};
+    }, () => {
+      inquiry.merchantReply = {original,status:'ERROR',error:'No reply translation was generated. The original reply is saved.'};
+    });
     return inquiry;
   }
   private update(id:string, change:(inquiry:Inquiry)=>void) {
