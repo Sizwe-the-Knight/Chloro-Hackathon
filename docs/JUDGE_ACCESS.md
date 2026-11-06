@@ -28,12 +28,12 @@ From the project directory run `pnpm dev`. Open the printed address, typically `
 3. **Traveler.** Choose **Review as traveler** and accept the exact offer. Start PayPal Sandbox checkout, sign in as the Personal Sandbox buyer and approve the test purchase. Wait for Chloro to show a verified Sandbox capture.
 4. **Both roles.** Mark the paid order ready in Merchant Holdings. Record the merchant handover there and the traveler collection in the traveler view. Both controls simulate a local handoff. [Sample inputs and full walkthrough](../README.md#run-a-fresh-judge-demonstration)
 
-Use future SAST dates and keep receipts private. Inquiry and reply requests share a 20-attempt SAST-day cap. If a provider fails or the app pauses requests, follow its status message and keep your local data. The two fictional profiles share one Sandbox seller. The role switch shares local state without separate sign-ins, which is why judging uses a local copy.
+Use future SAST dates and keep receipts private. Inquiry and reply requests share a 20-attempt SAST-day cap. If a provider fails or the app pauses requests, follow its status message and keep your local data. The two fictional profiles share one PayPal Sandbox Business account. The demo has no real merchant onboarding, production payments or international shipping. The role switch shares local state without separate sign-ins, which is why judging uses a local copy.
 
 ## What was verified
 
-- **Live evidence:** Kota Counter English-to-isiZulu inquiry, approved offer and acceptance, Sandbox capture and simulated handoff. The earlier Craft Studio flow verified a Spanish traveler inquiry translated to English and a Sandbox capture.
-- **Mocked evidence:** the new English-to-Spanish Craft Studio inquiry and both merchant reply translations to English. [Milestone evidence](../TRACKER.md)
+- **Live evidence.** The Kota Counter English-to-isiZulu inquiry returned **Gemini HTTP 200 OK** on November 6, 2026. The saved Kota purchase shows approval and acceptance, a verified Sandbox capture and both simulated handoff entries. The earlier Craft Studio flow verified a Spanish traveler inquiry translated to English and a Sandbox capture.
+- **Mocked evidence only.** The implemented Craft Studio English-to-Spanish inquiry and both merchant reply translations to English. [Milestone evidence](../TRACKER.md)
 
 ## Judge support through December 21, 2026
 

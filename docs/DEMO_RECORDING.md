@@ -4,7 +4,7 @@
 
 ## Prepare the translation evidence
 
-Kota Counter's English inquiry and isiZulu translation were verified live. The owner recorded merchant review, offer approval, traveler acceptance and handoff. The saved Kota order has a verified Sandbox capture and both handoff entries. Use the existing footage and read-only saved state. The new English-to-Spanish Craft Studio inquiry and the two merchant reply translations have mocked evidence. If you show the earlier Craft Studio translation, label it **Spanish traveler → English merchant · November 4, 2026**.
+Kota Counter's English-to-isiZulu inquiry returned **Gemini HTTP 200 OK** on November 6, 2026. The owner recorded merchant review, offer approval, traveler acceptance and handoff. The saved Kota order has a verified Sandbox capture and both simulated handoff entries. Use the existing footage and read-only saved state. The implemented Craft Studio English-to-Spanish inquiry and the two merchant reply translations have mocked evidence only. If you show the earlier live Craft Studio translation, label it **Spanish traveler → English merchant · November 4, 2026**.
 
 ## Set up the shots
 
@@ -26,4 +26,6 @@ Kota Counter's English inquiry and isiZulu translation were verified live. The o
 
 ## Before publishing the recording
 
-Confirm the export runs under three minutes and shows the verified language direction, approved offer, Sandbox receipt and collection instructions with the correct evidence labels. Use original narration and cleared assets. The public YouTube upload and Devpost submission are separate M6 steps.
+Confirm the export runs under three minutes and shows the verified language direction, approved offer, Sandbox receipt and collection instructions with the correct evidence labels. Disclose that both profiles are fictional and share one PayPal Sandbox Business account. The demo has no real merchant onboarding, production payments or international shipping. Use original narration and cleared assets.
+
+For Devpost, use the [self-run judge guide](JUDGE_ACCESS.md) and the owner's [GitHub Issues support channel](https://github.com/Sizwe-the-Knight/Chloro-Hackathon/issues), available through December 21, 2026. The public YouTube upload and Devpost submission are separate M6 steps.
